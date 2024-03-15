@@ -72,7 +72,7 @@ Does not block execution of other code. Sends and receives data as fast as possi
     String getUiData(const uint8_t &textSize = 10);
 ```
 
-## AS5600 QuickStart
+## DWIN Display QuickStart
 ```cpp
 #include <Arduino.h>
 #include <Dwin2.h>
