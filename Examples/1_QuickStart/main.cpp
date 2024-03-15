@@ -5,10 +5,10 @@
 #define RX_PIN 16
 #define TX_PIN 17
 
-// Класс управления UI элементами дисплея
+// Class of controlling UI elements of the display
 DWIN2 dwc;
 
-// Колбек функция для получения ответо от дисплея
+// Callback function to receive a response from the display
 void dwinEchoCallback(DWIN2 &d);
 
 void setup() {
@@ -33,7 +33,7 @@ void setup() {
 
 //----------------------------------------------------------------------------------------  
 
-    // Общие команды, которые относятся к дисплею, а не его UI элементам
+    // General commands that refer to the display and not its UI elements
     // Set/get display pages
     // Set page
     dwc.setPage(2);
