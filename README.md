@@ -141,8 +141,10 @@ void setup() {
     delay(d);
 
     // Send raw command
-    const uint8_t rawCmd1[] = {0x5A, 0xA5, 0x04, 0x82, 0x00, 0x82, 0x00};       // Set display brightness to 0%
-    const uint8_t rawCmd2[] = {0x5A, 0xA5, 0x04, 0x82, 0x00, 0x82, 0x7F};       // Set display brightness to 100%
+    // Set display brightness to 0%
+    const uint8_t rawCmd1[] = {0x5A, 0xA5, 0x04, 0x82, 0x00, 0x82, 0x00};
+    // Set display brightness to 100%       
+    const uint8_t rawCmd2[] = {0x5A, 0xA5, 0x04, 0x82, 0x00, 0x82, 0x7F};       
     dwc.sendRawCommand(rawCmd1, sizeof(rawCmd1));
     delay(d);
     dwc.sendRawCommand(rawCmd2, sizeof(rawCmd2));
