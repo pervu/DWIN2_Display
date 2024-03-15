@@ -1,8 +1,9 @@
 # DWIN2_Display
 
 Advanced ESP32 Libabry for DWIN DGUS T5L HMI Displays.<br>
-It is unofficial library for the DWIN DGUS Displays whith extended features for ESP32.<br>
+It is unofficial library for the DWIN DGUS Displays with extended features for ESP32.<br>
 Does not block execution of other code. Sends and receives data as fast as possible.<br>
+In the DWIN_Display_Interface folder you will find DGUS project example for the DWIN Display.<br>
 
 ## DWIN2 Class Methods
 ```cpp
