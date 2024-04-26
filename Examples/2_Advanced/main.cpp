@@ -34,10 +34,10 @@ void setup() {
     // VP SP address arrays
     const uint16_t vpArr[UIELEM_QTY] = {0x1000, 0x1010, 0x1020, 0x1030};
     const uint16_t spArr[UIELEM_QTY] = {0x9000, 0x9010, 0x9020, 0x9030};
-    // Инициализируем общение с дисплеем 
+    //Init common settings for the display communication 
     for (int i = 0; i < UIELEM_QTY; i++)
     {
-        // Создание объекта для работы с дисплеем
+        // Object to work with display
         dwc[i] = new DWIN2;
         // Init timers, tasks, serial communication and other
         dwc[i]->begin(spArr[i], vpArr[i], RX_PIN, TX_PIN);
