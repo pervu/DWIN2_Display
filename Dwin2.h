@@ -1,7 +1,7 @@
 //***************************************************
 //* Library to simplify working with DWIN Displays  *
 //* Lib use FreeRTOS, so for ESP32 only             *
-//* Copyright (C) 2024 Pavel Pervushkin.  Ver. 1.0  *
+//* Copyright (C) 2024 Pavel Pervushkin.  Ver.1.0.2 *
 //* Released under the MIT license.                 *
 //***************************************************
 
@@ -20,12 +20,14 @@
 
 
 #define BUFSIZE 256
+#define HW_SERIAL_NUM 2
 
 typedef enum {
     INT,
     DOUBLE,
     UTF,
-    ASCII
+    ASCII,
+    ICON
 } uitype_t;
 
 typedef struct {
@@ -107,7 +109,7 @@ private:
  
     // Read UART
     static std::vector<uint8_t> _uartRxBuf;
-    SemaphoreHandle_t _uartUiReadSem; // Бинарный семафор
+    SemaphoreHandle_t _uartUiReadSem; // Binary semaphore
 
     // Mutex for UART
     static SemaphoreHandle_t _uartMutex;
@@ -222,6 +224,10 @@ public:
     void sendData(const int &data);
     void sendData(const double &data);
     void sendData(const String &data);
+    // Set Variables Icon
+    void setVarIcon(const int &icoNum);
+    // Set UI-element position
+    void setPos(const int &x, const int &y);
     // Send the command to the display in Hex format
     void sendRawCommand(const uint8_t *cmd, const size_t &cmdLength);
     // Increment/decrement the value by a specified delta depending on the direction when calling the method
@@ -236,6 +242,8 @@ public:
     uint8_t getId();
     // Read data from UI element
     String getUiData(const uint8_t &textSize = 10);
+    // 
+    uint8_t getVarIconIndex();
 };
 
 

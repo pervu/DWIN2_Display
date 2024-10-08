@@ -35,7 +35,7 @@ void DWIN2::begin(const uint16_t &spHexAddr, const uint16_t &vpHexAddr, const ui
     _vpHexAddr = vpHexAddr;
 
     // UART initialization
-    _uart = new HardwareSerial(1);
+    _uart = new HardwareSerial(HW_SERIAL_NUM);
     if (_uart) _uart->begin(115200, SERIAL_8N1, rxPin, txPin);
 
     // Task for listening to uart
@@ -431,6 +431,37 @@ void DWIN2::sendData(const String &data)
     }
 }
 
+void DWIN2::setVarIcon(const int &icoNum)
+{
+    if (_uitype != ICON) 
+    {
+        Serial.printf("ID%d ERR sendData() wrong ui type, should be ICON\n", _id);
+        return;
+    }
+    const uint8_t commandLen = 8;
+    uint8_t command[commandLen] = {0x5A, 0xA5, 0x05, 0x82, 0x00, 0x00, 0x00, 0x00};
+    command[4] = highByte(_vpHexAddr);
+    command[5] = lowByte(_vpHexAddr);
+    command[6] = highByte(icoNum);
+    command[7] = lowByte(icoNum);
+    sendUart(command, commandLen);
+}
+
+
+void DWIN2::setPos(const int &x, const int &y)
+{
+    const uint8_t commandLen = 10;
+    uint8_t command[commandLen] = {0x5A, 0xA5, 0x07, 0x82, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    uint16_t offset = _spHexAddr + 1;
+    command[4] = highByte(offset);
+    command[5] = lowByte(offset);
+    command[6] = highByte(x);
+    command[7] = lowByte(x);
+    command[8] = highByte(y);
+    command[9] = lowByte(y);
+    sendUart(command, commandLen);
+}
+
 void DWIN2::sendRawCommand(const uint8_t *cmd, const size_t &cmdLength)
 {
     // Send data to uartTask
@@ -458,6 +489,7 @@ void DWIN2::clearText(uint8_t textLen)
     uint8_t command[commandLen] = {0x5A, 0xA5, cmdLen, 0x82, 0x00, 0x00};
     command[4] = highByte(_vpHexAddr);
     command[5] = lowByte(_vpHexAddr);
+
     if (_uitype == ASCII)
     {
         for (int i = 6; i < commandLen; i++)
@@ -987,4 +1019,31 @@ void DWIN2::restartHMI()
     // Send data to uartTask
     sendUart(command, commandLen);
     delay(100);
+}
+
+
+uint8_t DWIN2::getVarIconIndex()
+{
+    if (_uitype != ICON) return 0;
+    const uint8_t commandLen = 7;
+    uint16_t num = 0;
+
+    // Clear the receiving buffer of the display
+    clearRxBuf();
+
+    uint8_t command[commandLen] = {0x5A, 0xA5, 0x04, 0x83, 0x00, 0x00, 0x00};
+
+    command[4] = highByte(_vpHexAddr);
+    command[5] = lowByte(_vpHexAddr);
+    command[6] = 0x01;
+
+    // Send data to uartTask
+    sendUart(command, commandLen);
+    while (xSemaphoreTake(_uartUiReadSem, pdMS_TO_TICKS(100)) == pdTRUE){};
+    std::vector<uint8_t> buffer = _uartRxBuf; // Копируем полученные данные в буфер
+    if ((buffer[3] == 0x83) && (buffer[4] == highByte(_vpHexAddr)) && (buffer[5] == lowByte(_vpHexAddr)))
+    {
+        num = static_cast<uint16_t>(buffer[7] << 8) | static_cast<uint16_t>(buffer[8]);
+    }
+    return num;
 }
