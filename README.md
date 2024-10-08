@@ -5,6 +5,21 @@ It is unofficial library for the DWIN DGUS Displays with extended features for E
 Does not block execution of other code. Sends and receives data as fast as possible.<br>
 In the DWIN_Display_Interface folder you will find DGUS project example for the DWIN Display.<br>
 
+### DWIN2 Ver. 1.0.2 changes
+
+Added methods:<br>
+```cpp 
+void setVarIcon(const int &icoNum); // to set Variables Icon.
+void setPos(const int &x, const int &y); // to set UI-element position.
+uint8_t getVarIconIndex(); // to get current Variables Icon index.
+```
+
+Use 
+```cpp
+#define HW_SERIAL_NUM (hw number)
+```
+at .h file to change default HardwareSerial number connected to the DWIN display.<br>
+
 ## DWIN2 Class Methods
 ```cpp
     // Common methods
